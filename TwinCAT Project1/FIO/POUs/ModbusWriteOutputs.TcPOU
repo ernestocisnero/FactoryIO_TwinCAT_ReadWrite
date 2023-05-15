@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="ModbusWriteOutputs" Id="{a6f83a06-bd47-44b4-8f92-0c3025a80c44}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ModbusWriteOutputs
+VAR_INPUT
+	Data : BYTE;
+END_VAR
+	
+VAR_OUTPUT
+	bBUSY : BOOL;
+	bError : BOOL;
+	nErrId : UDINT;
+END_VAR
+
+VAR
+	fbwriteoutputs : FB_MBWriteCoils;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbwriteoutputs(
+	sIPAddr := '127.0.0.1', 
+	nTCPPort := 505, 
+	nUnitID := 255,
+	nQuantity := 2,
+	nMBAddr := 0, 
+	cbLength := SIZEOF(Data),
+	pSrcAddr := ADR(Data),
+	bExecute := TRUE, 
+	tTimeout := T#1S,
+);]]></ST>
+    </Implementation>
+    <LineIds Name="ModbusWriteOutputs">
+      <LineId Id="9" Count="0" />
+      <LineId Id="13" Count="7" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

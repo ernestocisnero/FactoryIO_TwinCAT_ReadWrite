@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MAIN" Id="{46a88e70-018e-4a2c-8074-d59c6124b5c0}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	fb_ReadInputs : ModbusReadInputs;
+	fb_WriteOutputs : ModbusWriteOutputs;
+	data: ARRAY [0..1] OF BYTE;
+	bSensorEndConveyor: BOOL;
+	bStartStopConveyor: ARRAY [0..1] OF BYTE := [2#0000_0001, 2#0000_0000];
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fb_ReadInputs(Data=> data);
+bSensorEndConveyor := data[0].0;
+
+IF bSensorEndConveyor THEN
+	fb_WriteOutputs(Data := CONTROL.StartConveyor);
+//ELSIF NOT bSensorEndConveyor THEN
+	//fb_WriteOutputs(Data := CONTROL.StopConveyor);	
+END_IF;
+
+	
+
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="31" Count="0" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="107" Count="0" />
+      <LineId Id="113" Count="0" />
+      <LineId Id="136" Count="1" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="135" Count="0" />
+      <LineId Id="116" Count="0" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="105" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

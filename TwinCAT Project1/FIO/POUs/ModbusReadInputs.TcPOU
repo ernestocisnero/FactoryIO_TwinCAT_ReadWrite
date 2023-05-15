@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="ModbusReadInputs" Id="{8f9613f6-54d3-4d59-b314-10736ea8598a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ModbusReadInputs
+
+VAR_INPUT
+	
+END_VAR
+
+VAR_OUTPUT
+	Data : ARRAY [0..1] OF BYTE;
+	bReadInputsBusy : BOOL;
+    bReadInputsError : BOOL;
+    nReadInputsErrorId : UDINT;
+END_VAR
+
+VAR
+	fbReadInputs : FB_MBReadInputs;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbReadInputs(
+	sIPAddr := '127.0.0.1', // Is a string containing the IP address of the target device
+	nTCPPort := 505, //Port number of the target device.
+	nUnitID := 255, //  Identification number of a serial sub-network device. (Slave number)
+	nQuantity := 16, // Number of digital inputs (data bits) to be read
+	nMBAddr := 0, // Start address of the digital inputs to be read (bit offset).
+	cbLength := SIZEOF(Data),
+	pDestAddr := ADR(Data), // Contains the address of the destination buffer into which the data are to be read.
+	bExecute := TRUE, // The function block is activated by a rising edge at this input.
+	tTimeout := T#1S, // States the length of the timeout that may not be exceeded by execution of the ADS command.
+	bBusy => bReadInputsBusy ,
+	bError => bReadInputsError,
+	nErrId => nReadInputsErrorId,
+	cbRead => ,
+);
+
+// The FB_MBReadInputs get activated after a rising edge at bExecute input.
+fbReadInputs(bExecute := FALSE);
+fbReadInputs(bExecute := TRUE);]]></ST>
+    </Implementation>
+    <LineIds Name="ModbusReadInputs">
+      <LineId Id="77" Count="13" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="93" Count="2" />
+      <LineId Id="92" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
